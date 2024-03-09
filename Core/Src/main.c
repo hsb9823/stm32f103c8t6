@@ -84,42 +84,46 @@ int main(void)
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
-  MX_GPIO_Init();
+//  MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
 
   volatile unsigned int * reg = 0x40021018;		//RCC->APB2ENR
-  *reg |= 16;									// clock enable part
-
+  *reg |= 16;									//CLOCK SET
+/*
   GPIO_InitTypeDef GPIO_InitStruct = {0};		//configuration GPIO pin
   GPIO_InitStruct.Pin = GPIO_LED_Pin;			//PC13  1 << 13
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;	//1
   GPIO_InitStruct.Pull = GPIO_PULLDOWN;			//2
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;	//3
   HAL_GPIO_Init(GPIO_LED_GPIO_Port, &GPIO_InitStruct); //configuration GPIO pin
+*/
+
+  volatile unsigned int * reg2 = 0x40011004;
+  *reg2 = (*reg2 & ~(15UL << 20U)) | (3U << 20U);	//GPIOC 13 Pin set
 
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  volatile unsigned int * reg2 = 0x40011010; 	//&(GPIO_LED_GPIO_Port->BSRR) port address
+  volatile unsigned int * reg3 = 0x40011010; 	//&(GPIO_LED_GPIO_Port->BSRR) port address
   while (1)
   {
 
-	  *reg2 = 0x2000;							// 8192 == 16
+	  *reg3 = 0x2000;							// 8192 == 16 / 13pin on
 
 	  HAL_Delay(100);
-	  *reg2 = (0x2000 << 16);					// 8192 to left 16 bit shift
-	  HAL_Delay(100);
+	  *reg3 = (0x2000 << 16);					// 8192 to left 16 bit shift / 13pin off
+	  HAL_Delay(100);							// led on off
 
 
-	  if(!HAL_GPIO_ReadPin(GPIO_Switch_GPIO_Port, GPIO_Switch_Pin)){
-		  HAL_GPIO_WritePin(GPIO_LED_GPIO_Port, GPIO_LED_Pin, 0);
-	  }
-	  else{
-		  HAL_GPIO_WritePin(GPIO_LED_GPIO_Port, GPIO_LED_Pin, 1);
-	  }
-
-	  HAL_Delay(100);
+//	  if(!HAL_GPIO_ReadPin(GPIO_Switch_GPIO_Port, GPIO_Switch_Pin)){
+//		  HAL_GPIO_WritePin(GPIO_LED_GPIO_Port, GPIO_LED_Pin, 0);
+//	  }
+//	  else{
+//		  HAL_GPIO_WritePin(GPIO_LED_GPIO_Port, GPIO_LED_Pin, 1);
+//	  }
+//
+//	  HAL_Delay(100);
 
     /* USER CODE END WHILE */
 
@@ -127,7 +131,6 @@ int main(void)
   }
   /* USER CODE END 3 */
 }
-
 
 /**
   * @brief System Clock Configuration
@@ -186,7 +189,7 @@ static void MX_GPIO_Init(void)
   /*Configure GPIO pin : GPIO_LED_Pin */
   GPIO_InitStruct.Pin = GPIO_LED_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Pull = GPIO_PULLDOWN;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
   HAL_GPIO_Init(GPIO_LED_GPIO_Port, &GPIO_InitStruct);
 
