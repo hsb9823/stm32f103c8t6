@@ -87,7 +87,7 @@ int main(void)
   MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
 
-  volatile unsigned int * reg = 0x40021018;		//RCC->APB2ENR
+//  volatile unsigned int * reg = 0x40021018;		//RCC->APB2ENR
   *reg |= 16;									// clock enable part
 
   GPIO_InitTypeDef GPIO_InitStruct = {0};		//configuration GPIO pin
@@ -101,25 +101,25 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  volatile unsigned int * reg2 = 0x40011010; 	//&(GPIO_LED_GPIO_Port->BSRR) port address
+//  volatile unsigned int * reg2 = 0x40011010; 	//&(GPIO_LED_GPIO_Port->BSRR) port address
   while (1)
   {
 
-	  *reg2 = 0x2000;							// 8192 == 16
-
-	  HAL_Delay(100);
-	  *reg2 = (0x2000 << 16);					// 8192 to left 16 bit shift
-	  HAL_Delay(100);
-
-
-	  if(!HAL_GPIO_ReadPin(GPIO_Switch_GPIO_Port, GPIO_Switch_Pin)){
-		  HAL_GPIO_WritePin(GPIO_LED_GPIO_Port, GPIO_LED_Pin, 0);
-	  }
-	  else{
-		  HAL_GPIO_WritePin(GPIO_LED_GPIO_Port, GPIO_LED_Pin, 1);
-	  }
-
-	  HAL_Delay(100);
+//	  *reg2 = 0x2000;							// 8192 == 16
+//
+//	  HAL_Delay(100);
+//	  *reg2 = (0x2000 << 16);					// 8192 to left 16 bit shift
+//	  HAL_Delay(100);
+//
+//
+//	  if(!HAL_GPIO_ReadPin(GPIO_Switch_GPIO_Port, GPIO_Switch_Pin)){
+//		  HAL_GPIO_WritePin(GPIO_LED_GPIO_Port, GPIO_LED_Pin, 0);
+//	  }
+//	  else{
+//		  HAL_GPIO_WritePin(GPIO_LED_GPIO_Port, GPIO_LED_Pin, 1);
+//	  }
+//
+//	  HAL_Delay(100);
 
     /* USER CODE END WHILE */
 
