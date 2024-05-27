@@ -22,6 +22,16 @@
 #include "stm32f1xx_it.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "fnd_controller.h"
+#include "ds18b20.h"
+#include "heaterController.h"
+#include <stdio.h>
+#include "ex_var.h"
+#include "defines.h"
+#include "oledController.h"
+#include "controlType.h"
+#include "temperCounter.h"
+#include "ledController.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -42,6 +52,12 @@
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
 
+static uint32_t m_button_before_time = 0;
+static uint32_t m_power_sw_timer = 0;
+//static uint32_t m_blink_timer = 0;
+static int m_desired_temper;
+static int m_fixed_temper;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -55,7 +71,8 @@
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
-
+extern TIM_HandleTypeDef htim2;
+extern TIM_HandleTypeDef htim3;
 /* USER CODE BEGIN EV */
 
 /* USER CODE END EV */
@@ -198,6 +215,118 @@ void SysTick_Handler(void)
 /* please refer to the startup file (startup_stm32f1xx.s).                    */
 /******************************************************************************/
 
+/**
+  * @brief This function handles EXTI line0 interrupt.
+  */
+void EXTI0_IRQHandler(void)
+{
+  /* USER CODE BEGIN EXTI0_IRQn 0 */
+
+  /* USER CODE END EXTI0_IRQn 0 */
+  HAL_GPIO_EXTI_IRQHandler(PB0_TEMP_SET_UP_Pin);
+  /* USER CODE BEGIN EXTI0_IRQn 1 */
+	if ((HAL_GetTick() - m_button_before_time) > BUTTON_GAP) {
+		g_f_sw_up = 1;
+	}
+
+  m_button_before_time = HAL_GetTick();
+  /* USER CODE END EXTI0_IRQn 1 */
+}
+
+/**
+  * @brief This function handles EXTI line1 interrupt.
+  */
+void EXTI1_IRQHandler(void)
+{
+  /* USER CODE BEGIN EXTI1_IRQn 0 */
+
+  /* USER CODE END EXTI1_IRQn 0 */
+  HAL_GPIO_EXTI_IRQHandler(PB1_TEMP_SET_FIX_Pin);
+  /* USER CODE BEGIN EXTI1_IRQn 1 */
+  if((HAL_GetTick() - m_button_before_time) > BUTTON_GAP){
+	  g_f_sw_fix = 1;
+  }
+
+  m_button_before_time = HAL_GetTick();
+  /* USER CODE END EXTI1_IRQn 1 */
+}
+
+/**
+  * @brief This function handles EXTI line2 interrupt.
+  */
+void EXTI2_IRQHandler(void)
+{
+  /* USER CODE BEGIN EXTI2_IRQn 0 */
+
+  /* USER CODE END EXTI2_IRQn 0 */
+  HAL_GPIO_EXTI_IRQHandler(PB2_TEMP_SET_DOWN_Pin);
+  /* USER CODE BEGIN EXTI2_IRQn 1 */
+  if((HAL_GetTick() - m_button_before_time) > BUTTON_GAP){
+	  g_f_sw_down = 1;
+  }
+
+  m_button_before_time = HAL_GetTick();
+  /* USER CODE END EXTI2_IRQn 1 */
+}
+
+/**
+  * @brief This function handles TIM2 global interrupt.
+  */
+void TIM2_IRQHandler(void)
+{
+  /* USER CODE BEGIN TIM2_IRQn 0 */
+
+  /* USER CODE END TIM2_IRQn 0 */
+  HAL_TIM_IRQHandler(&htim2);
+  /* USER CODE BEGIN TIM2_IRQn 1 */
+
+  /* USER CODE END TIM2_IRQn 1 */
+}
+
+/**
+  * @brief This function handles TIM3 global interrupt.
+  */
+void TIM3_IRQHandler(void)
+{
+  /* USER CODE BEGIN TIM3_IRQn 0 */
+	if (m_power_sw_timer > POWER_SW_CHECK_TIME) {
+		if (getSwState() == ON_t) {
+			led1_OnOff(ON_t);
+
+		} else {
+			led1_OnOff(OFF_t);
+		}
+		m_power_sw_timer = 0;
+	}
+
+	m_power_sw_timer++;
+
+
+	// 2 count toggle
+//	if (m_blink_timer > TOGGLE_TIME) {
+//		blinkScreen();
+//		m_blink_timer = 0;
+//
+//	}
+//
+//	m_blink_timer++;
+
+
+
+	/* invert temper value */
+	if (isTemperSensorInit() && !isBusy()) {
+		digit4_temper((int) (getCurrentTemper() * 10));
+	}
+  /* USER CODE END TIM3_IRQn 0 */
+  HAL_TIM_IRQHandler(&htim3);
+  /* USER CODE BEGIN TIM3_IRQn 1 */
+
+  /* USER CODE END TIM3_IRQn 1 */
+}
+
 /* USER CODE BEGIN 1 */
+
+
+
 
 /* USER CODE END 1 */
