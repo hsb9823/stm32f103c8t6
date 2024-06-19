@@ -2,13 +2,14 @@
 
 ## 구성 부품 
 
-1️⃣ 온도 측정 모듈
+1️⃣ 온도 측정 모듈 </br>
 ➡ DS18B20 Temper Sensor
 
-2️⃣ FND 모듈
+2️⃣ FND 모듈 </br>
 ➡ LDQ-M3604RI
 
-3️⃣ UART
+3️⃣ UART </br>
 ➡ FTDI USB-TTL
 
-4️⃣ 
+4️⃣ OLED LCD </br>
+➡ SSD1306
