@@ -10,27 +10,27 @@ stm32를 이용한 프로젝트로 오제이튜브님의 강의를 보고 만든
 ---
 ### 🌟 주요 모듈 
 
-1️⃣ Main Board
-➡ stm32f103c8t6 </br>
-➡ st-link v2 </br>
+**1️⃣ Main Board** </br>
+→ stm32f103c8t6 </br>
+→ st-link v2 </br>
 
-2️⃣ 온도 측정 모듈 </br>
-➡ DS18B20 Temper Sensor </br>
+**2️⃣ 온도 측정 모듈** </br>
+→ DS18B20 Temper Sensor </br>
 <ins>1-Wire 통신</ins> </br>
 
-3️⃣ FND 모듈 </br>
-➡ LDQ-M3604RI </br>
+**3️⃣ FND 모듈** </br>
+→ LDQ-M3604RI </br>
 <ins>SPI 통신</ins> </br>
 
-4️⃣ UART </br>
-➡ FTDI USB-TTL </br>
+**4️⃣ UART** </br>
+→ FTDI USB-TTL </br>
 <ins>USB</ins> </br>
 
-5️⃣ OLED LCD </br>
-➡ SSD1306 </br>
+**5️⃣ OLED LCD** </br>
+→ SSD1306 </br>
 <ins>I2C 통신</ins> </br>
 
-6️⃣ etc. </br>
+**6️⃣ etc.** </br>
 LED / Switch / 5v relay module 
 
 ---
@@ -38,3 +38,6 @@ LED / Switch / 5v relay module
 ### 하드웨어
 ![하드웨어](https://github.com/hsb9823/stm32f103c8t6/blob/main/final.jpg)
 
+---
+## 구동 영상
+Blog <https://blog.naver.com/hsb3849/223453093754>
