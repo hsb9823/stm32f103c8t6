@@ -2,5 +2,13 @@
 
 ## 구성 부품 
 
-### 온도계 
-ds18b20 온도 측정 모듈
+1️⃣ 온도 측정 모듈
+➡ DS18B20 Temper Sensor
+
+2️⃣ FND 모듈
+➡ LDQ-M3604RI
+
+3️⃣ UART
+➡ FTDI USB-TTL
+
+4️⃣ 
